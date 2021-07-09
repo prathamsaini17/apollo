@@ -1,0 +1,9 @@
+mysqladmin -uroot -pbigdata drop healthcare
+mysqladmin -uroot -pbigdata create healthcare
+mysql -uroot -pbigdata healthcare < Healthcare.sql
+
+
+hive
+show databases;
+create database healthcare;
+use healthcare;

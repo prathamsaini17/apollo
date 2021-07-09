@@ -1,0 +1,17 @@
+sudo -u hdfs hadoop fs -mkdir -p /user/healthcare
+sudo -u hdfs hadoop fs -chown -R root:root /user/healthcare
+sudo -u hdfs hadoop fs -chmod -R 755 /user/healthcare
+
+hadoop fs -mkdir /user/healthcare/transaction
+hadoop fs -mkdir /user/healthcare/data_warehouse
+
+hadoop fs -mkdir /user/healthcare/transaction/Undergoes
+hadoop fs -mkdir /user/healthcare/transaction/Undergoes/Hot
+hadoop fs -mkdir /user/healthcare/transaction/Appointment
+hadoop fs -mkdir /user/healthcare/transaction/Appointment/Hot
+hadoop fs -mkdir /user/healthcare/transaction/Prescribes
+hadoop fs -mkdir /user/healthcare/transaction/Prescribes/Hot
+hadoop fs -mkdir /user/healthcare/transaction/Medication
+hadoop fs -mkdir /user/healthcare/transaction/Medication/Hot
+hadoop fs -mkdir /user/healthcare/transaction/Procedures
+hadoop fs -mkdir /user/healthcare/transaction/Procedures/Hot

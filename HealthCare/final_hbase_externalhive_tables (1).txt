@@ -1,0 +1,60 @@
+﻿VIEW in sql for datawarehouse
+=================================================================================
+create view dw1 as select p.SSN , p.Name as PNAME , p.Address ,
+p.Phone, p.InsuranceID , p.PCP,a.AppointmentID, a.Patient ,
+a.PrepNurse, a.Physician, a.Start, a.End, a.ExaminationRoom,
+n.EmployeeID , n.Name as NNAME, n.Position, n.Registered, n.SSN as
+NSSN , s.EmployeeID as PHYEMPLOYEEID, s.Name as PHYNAME , s.Position
+as PHYPOSITION , s.SSN as PHYSSN FROM patient p join appointment a on
+a.Patient = p.SSN join nurse n on a.PrepNurse = n.EmployeeID join
+physician s on a.Physician = s.EmployeeID ;
+=================================================================================
+
+External Tables for HBASE
+=================================================================================
+CREATE EXTERNAL TABLE patient(ssn int, name string,address string, phone string, insurance_id int, pcp int) 
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' 
+WITH SERDEPROPERTIES("hbase.columns.mapping"=":key,patient:Name,patient:Address,patient:Phone,patient:InsuranceID,patient:PCP") 
+TBLPROPERTIES ("hbase.table.name" = "healthcare");
+
+CREATE EXTERNAL TABLE physician(employee_id int, name string, position string,ssn int) 
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' 
+WITH SERDEPROPERTIES ("hbase.columns.mapping"=":key,physician:Name,physician:Position,physician:SSN") 
+TBLPROPERTIES ("hbase.table.name" = "healthcare");
+=================================================================================
+
+
+External table for datawarehouse
+=================================================================================
+
+create external table dw 
+(
+SSN int,
+PNAME string,
+Address string,
+Phone string,
+InsuranceID int,
+PCP int,
+AppointmentID int,
+Patient int,
+PrepNurse int,
+Physician int,
+Start_ timestamp,
+End_ timestamp,
+ExaminationRoom string,
+EmployeeID int,
+NNAME string,
+Position string,
+Registered int, 
+NSSN int,
+PHYEMPLOYEEID int,
+PHYNAME string,
+PHYPOSITION string,
+PHYSSN int
+)       
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION '/user/healthcare/data_warehouse'
+tblproperties ("skip.header.line.count"="1");
+=================================================================================

@@ -1,0 +1,44 @@
+ETL for master tables  
+
+------------------------------------------------------------------------------------------------------------------------- 
+
+create 'healthcare','physician', 'patient' 
+
+ 
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh --password cdh-123 --table physician --hbase-table healthcare --column-family physician --hbase-row-key EmployeeID -m 1
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh --password cdh-123 --table patient --hbase-table healthcare --column-family patient --hbase-row-key SSN -m 1
+
+------------------------------------------------------------------------------------------------------------------------- 
+
+
+
+ETL for DataWarehouse 
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh --password cdh-123 --table dw1 -m 1 --target-dir /user/healthcare/data_warehouse --incremental append --check-column EmployeeID --last-value 0
+ 
+
+
+
+ETL for transaction tables: 
+
+------------------------------------------------------------------------------------------------------------------------------- 
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh -P --table undergoes  --where 'year(DateUndergoes)=2020' --target-dir /user/healthcare/transaction/undergoes/Hot/13042020 --incremental append --check-column Patient --last-value 0 -m 1
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/ healthcare --username cdh -P --table undergoes --where 'year(DateUndergoes) between 2000 and 2019' --target-dir /user/healthcare/transaction/undergoes/warm --as-parquetfile –m 1
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh –P --table undergoes --where 'year(DateUndergoes) < 2000'  --target-dir /user/healthcare/transaction/undergoes/archive –compress –m 1
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh -P --table appointment --target-dir /user/healthcare/transaction/Appointment/Hot/13042020 -m 1
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh -P --table prescribes --target-dir /user/healthcare/transaction/Prescribes/Hot/13042020 -m 1
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh -P --table medication --target-dir /user/healthcare/transaction/Medication/Hot/13042020 -m 1
+
+sqoop import --connect jdbc:mysql://quickstart.cloudera/healthcare --username cdh -P --table procedures --target-dir /user/healthcare/transaction/Procedures/Hot/13042020 -m 1
+
+------------------------------------------------------------------------------------------------------------------------------------ 
+
+ 
+
+ 

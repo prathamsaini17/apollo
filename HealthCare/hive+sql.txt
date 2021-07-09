@@ -1,0 +1,25 @@
+ HIVE QUERIES -- (without joins)
+
+Name of patients who took appointment on 25 april at 10 am also display their physician , assisting nurses and room number 
+Sql query------------------------
+Select t.Name as patientname ,
+n.Name as nursename,
+p.Name as physicianname,
+a.ExaminationRoom as roomnumber,
+a.Start
+From patient t
+JOIN appointment a ON a.Patient = t.SSN
+JOIN nurse n ON a.PrepNurse = n.EmployeeID
+JOIN physician p ON a. Physician = p.EmployeeID
+Where Start = "2008-04-25 10:00:00"
+--------------------------------- Hive query -----------------------
+
+Select PNAME, PHYNAME, NNAME,ExaminationRoom from dw 
+Where start_ = "2008-04-25 10:00:00"
+-------------------------------------
+
+    
+  BATCH LAYER
+2. all information about patients who took an advanced appointment and also display their physicians and medication  
+
+4.decide to get the name of patients and the room number where they have to go for their treatment
